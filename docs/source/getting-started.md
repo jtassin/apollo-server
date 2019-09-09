@@ -10,9 +10,7 @@ In this guide, we'll walk you through the process of creating a GraphQL server i
 * Have a basic understanding of the fundamental GraphQL principles.
 * Be able to send a query to the new GraphQL server and see the response using GraphQL Playground.
 
-To be successful, make sure you already have general JavaScript knowledge and a recent version of Node.js installed (6+).
-
-If you want to skip walking through the steps, the [More information](#More-information) section at the bottom has a link to a GitHub repository which can be cloned and run locally, and a Glitch to play around in your browser!
+To be successful, make sure you already have general JavaScript knowledge and a recent version of Node.js installed (8+).
 
 ## Step 1: Project initialization
 
@@ -38,8 +36,8 @@ If the above steps all completed successfully, there should be a new `package.js
 
 Next, we'll install the two core dependencies which are necessary for responding to GraphQL requests:
 
-* [`apollo-server`](//npm.im/apollo-server): The Apollo server library which allows you to focus on defining the shape of your data and how to fetch it.
-* [`graphql`](//npm.im/graphql): The library used to build a schema and to execute queries on that schema.
+* [`apollo-server`](https://npm.im/apollo-server): The Apollo server library which allows you to focus on defining the shape of your data and how to fetch it.
+* [`graphql`](https://npm.im/graphql): The library used to build a schema and to execute queries on that schema.
   > Note: There won't be any usage of the `graphql` package in this guide, but it is required to be installed separately as it's an important "peer dependency" of Apollo Server.
 
 While you could write all of the necessary code yourself, these two dependencies make it easier to build a GraphQL server and are common in applications of all sizes.
@@ -163,18 +161,6 @@ If we press the play button in the middle, we should see a response on the right
 
 This application should be a great starting point for any GraphQL server, but the following resources are a great next step in building a GraphQL server:
 
-* [Adding Apollo Server to an existing app.](./essentials/server.html#integrations)
-* [Schema design](./essentials/schema.html)
-* [Deploy with Heroku](./deployment/heroku.html)
-
-## More information
-
-### GitHub Repository
-
-The code from the above examples can be accessed in our [getting started example repository](https://github.com/apollographql/graphql-server-example) on GitHub
-
-### Online Playground
-
-It's also possible to play with this example on Glitch, by remixing the repository.
-
-[![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/apollographql/graphql-server-example)
+* [Adding Apollo Server to an existing app.](/essentials/server/#server-integrations)
+* [Schema design](/essentials/schema/)
+* [Deploy with Heroku](/deployment/heroku/)

@@ -5,6 +5,7 @@ import {
   IMocks,
   GraphQLParseOptions,
 } from 'graphql-tools';
+import { ValueOrPromise, GraphQLExecutor } from 'apollo-server-types';
 import { ConnectionContext } from 'subscriptions-transport-ws';
 // The types for `ws` use `export = WebSocket`, so we'll use the
 // matching `import =` to bring in its sole export.
@@ -32,7 +33,7 @@ export { KeyValueCache } from 'apollo-server-caching';
 export type Context<T = object> = T;
 export type ContextFunction<FunctionParams = any, ProducedContext = object> = (
   context: FunctionParams,
-) => Context<ProducedContext> | Promise<Context<ProducedContext>>;
+) => ValueOrPromise<Context<ProducedContext>>;
 
 // A plugin can return an interface that matches `ApolloServerPlugin`, or a
 // factory function that returns `ApolloServerPlugin`.
@@ -55,6 +56,7 @@ type BaseConfig = Pick<
   | 'debug'
   | 'rootValue'
   | 'validationRules'
+  | 'executor'
   | 'formatResponse'
   | 'fieldResolver'
   | 'tracing'
@@ -62,13 +64,38 @@ type BaseConfig = Pick<
   | 'cache'
 >;
 
+export type Unsubscriber = () => void;
+export type SchemaChangeCallback = (schema: GraphQLSchema) => void;
+
+export type GraphQLServiceConfig = {
+  schema: GraphQLSchema;
+  executor: GraphQLExecutor;
+};
+
+/**
+ * This is a restricted view of an engine configuration which only supplies the
+ * necessary info for accessing things like cloud storage.
+ */
+export type GraphQLServiceEngineConfig = {
+  apiKeyHash: string;
+  graphId: string;
+  graphVariant?: string;
+};
+
+export interface GraphQLService {
+  load(options: {
+    engine?: GraphQLServiceEngineConfig;
+  }): Promise<GraphQLServiceConfig>;
+  onSchemaChange(callback: SchemaChangeCallback): Unsubscriber;
+}
+
 // This configuration is shared between all integrations and should include
 // fields that are not specific to a single integration
 export interface Config extends BaseConfig {
   modules?: GraphQLSchemaModule[];
-  typeDefs?: DocumentNode | Array<DocumentNode>;
+  typeDefs?: DocumentNode | Array<DocumentNode> | string | Array<string>;
   parseOptions?: GraphQLParseOptions;
-  resolvers?: IResolvers;
+  resolvers?: IResolvers | Array<IResolvers>;
   schema?: GraphQLSchema;
   schemaDirectives?: Record<string, typeof SchemaDirectiveVisitor>;
   context?: Context | ContextFunction;
@@ -84,6 +111,7 @@ export interface Config extends BaseConfig {
   //https://github.com/jaydenseric/graphql-upload#type-uploadoptions
   uploads?: boolean | FileUploadOptions;
   playground?: PlaygroundConfig;
+  gateway?: GraphQLService;
 }
 
 export interface FileUploadOptions {
